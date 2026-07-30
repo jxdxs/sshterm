@@ -1,4 +1,4 @@
-use ssh2::{DisconnectCode, Session, Channel, Sftp};
+use ssh2::{Session, Channel, Sftp};
 use std::io::Read;
 use std::net::TcpStream;
 use std::path::Path;
