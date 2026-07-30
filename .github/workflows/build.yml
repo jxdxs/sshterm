@@ -112,16 +112,18 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: SSHTerm-linux
-          path: release-artifacts
+          path: release-artifacts/linux
 
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
         with:
           name: SSHTerm-windows
-          path: release-artifacts
+          path: release-artifacts/windows
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: release-artifacts/*
+          files: |
+            release-artifacts/linux/*
+            release-artifacts/windows/*
           generate_release_notes: true
