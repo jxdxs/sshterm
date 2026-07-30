@@ -38,13 +38,16 @@ jobs:
           toolchain: stable
           target: x86_64-unknown-linux-gnu
 
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build frontend
+        run: npx vite build
+
       - name: Install Tauri CLI
         run: cargo install tauri-cli --version "^2.0"
 
-      - name: Install frontend dependencies
-        run: npm ci
-
-      - name: Build (Linux)
+      - name: Build Tauri (Linux)
         run: cargo tauri build --bundles deb,appimage
         env:
           TAURI_SIGNING_PRIVATE_KEY: ""
@@ -74,13 +77,16 @@ jobs:
           toolchain: stable
           target: x86_64-pc-windows-msvc
 
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build frontend
+        run: npx vite build
+
       - name: Install Tauri CLI
         run: cargo install tauri-cli --version "^2.0"
 
-      - name: Install frontend dependencies
-        run: npm ci
-
-      - name: Build (Windows)
+      - name: Build Tauri (Windows)
         run: cargo tauri build --bundles msi
         env:
           TAURI_SIGNING_PRIVATE_KEY: ""
