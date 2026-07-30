@@ -53,13 +53,16 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ""
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
 
+      - name: List build artifacts
+        run: find src-tauri/target/release/bundle -type f -ls 2>/dev/null || echo "No bundle dir found"
+
       - name: Upload artifacts (Linux)
         uses: actions/upload-artifact@v4
         with:
           name: SSHTerm-linux
           path: |
-            src-tauri/target/release/bundle/deb/*.deb
-            src-tauri/target/release/bundle/appimage/*.AppImage
+            src-tauri/target/release/bundle/deb/*
+            src-tauri/target/release/bundle/appimage/*
 
   build-windows:
     runs-on: windows-2022
