@@ -64,6 +64,7 @@ impl SshSession {
         })
     }
 
+    #[allow(dead_code)]
     pub fn create_shell(&self, cols: u32, rows: u32) -> Result<Channel, String> {
         let session = self.session.lock().map_err(|e| e.to_string())?;
         let mut channel = session.channel_session()
