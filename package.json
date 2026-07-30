@@ -1,0 +1,21 @@
+{
+  "name": "sshterm",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0",
+    "xterm-addon-webgl": "^0.16.0",
+    "xterm-addon-search": "^0.13.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0",
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/cli": "^2.0.0"
+  }
+}

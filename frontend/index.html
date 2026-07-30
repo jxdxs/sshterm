@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSHTerm</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div id="app">
+  <!-- 侧边栏：主机列表 -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <h2>🔌 SSHTerm</h2>
+      <button id="btn-add-host" class="icon-btn" title="添加主机">➕</button>
+    </div>
+    <div id="host-search">
+      <input type="text" id="search-hosts" placeholder="搜索主机..." />
+    </div>
+    <nav id="host-list"></nav>
+  </aside>
+
+  <!-- 主面板 -->
+  <main id="main">
+    <!-- 标签栏 -->
+    <div id="tab-bar">
+      <div id="tabs"></div>
+    </div>
+
+    <!-- 内容面板 -->
+    <div id="content">
+      <!-- 欢迎页 -->
+      <div id="welcome" class="panel active">
+        <div class="welcome-content">
+          <h1>SSHTerm</h1>
+          <p>选择左侧主机连接，或点击 ➕ 添加新主机</p>
+        </div>
+      </div>
+
+      <!-- 终端面板 -->
+      <div id="terminal-panel" class="panel">
+        <div id="terminal-container"></div>
+        <div id="terminal-input-bar" class="hidden">
+          <input type="text" id="quick-command" placeholder="输入命令回车执行…" />
+        </div>
+      </div>
+
+      <!-- SFTP 面板 -->
+      <div id="sftp-panel" class="panel hidden">
+        <div class="sftp-layout">
+          <!-- 左侧远程文件 -->
+          <div class="sftp-pane">
+            <div class="sftp-toolbar">
+              <span class="sftp-path" id="remote-path">/</span>
+              <div class="sftp-actions">
+                <button class="sftp-btn" id="btn-remote-mkdir">📁 新建</button>
+                <button class="sftp-btn" id="btn-remote-upload">⬆️ 上传</button>
+                <button class="sftp-btn" id="btn-remote-refresh">🔄 刷新</button>
+              </div>
+            </div>
+            <div id="remote-files" class="sftp-file-list"></div>
+          </div>
+
+          <!-- 中间操作按钮 -->
+          <div class="sftp-actions-center">
+            <button id="btn-download-selected" title="下载选中">⬇️</button>
+            <button id="btn-upload-selected" title="上传选中">⬆️</button>
+          </div>
+
+          <!-- 右侧本地文件 -->
+          <div class="sftp-pane">
+            <div class="sftp-toolbar">
+              <span class="sftp-path" id="local-path"></span>
+              <div class="sftp-actions">
+                <button class="sftp-btn" id="btn-local-refresh">🔄 刷新</button>
+              </div>
+            </div>
+            <div id="local-files" class="sftp-file-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 添加/编辑主机对话框 -->
+  <div id="host-dialog" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="dialog-title">添加主机</h3>
+        <button class="icon-btn" onclick="closeHostDialog()">✕</button>
+      </div>
+      <form id="host-form">
+        <input type="hidden" id="host-id" />
+        <div class="form-row">
+          <label>名称</label>
+          <input type="text" id="host-name" placeholder="例如: 我的服务器" required />
+        </div>
+        <div class="form-row">
+          <label>主机地址</label>
+          <input type="text" id="host-hostname" placeholder="192.168.1.100" required />
+        </div>
+        <div class="form-row">
+          <label>端口</label>
+          <input type="number" id="host-port" value="22" required />
+        </div>
+        <div class="form-row">
+          <label>用户名</label>
+          <input type="text" id="host-username" value="root" required />
+        </div>
+        <div class="form-row">
+          <label>分组</label>
+          <input type="text" id="host-group" placeholder="Default" value="Default" />
+        </div>
+        <div class="form-row">
+          <label>认证方式</label>
+          <select id="host-auth-type">
+            <option value="password">密码</option>
+            <option value="key">密钥</option>
+          </select>
+        </div>
+        <div class="form-row" id="password-row">
+          <label>密码</label>
+          <input type="password" id="host-password" />
+        </div>
+        <div class="form-row hidden" id="key-row">
+          <label>密钥路径</label>
+          <input type="text" id="host-key-path" placeholder="/home/user/.ssh/id_rsa" />
+          <label>密钥密码（可选）</label>
+          <input type="password" id="host-key-passphrase" />
+        </div>
+        <div class="form-row">
+          <label>颜色标记</label>
+          <input type="color" id="host-color" value="#667eea" />
+        </div>
+        <div class="form-row">
+          <label>备注</label>
+          <textarea id="host-notes" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">保存</button>
+          <button type="button" class="btn-secondary" onclick="closeHostDialog()">取消</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>
