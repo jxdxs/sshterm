@@ -10,7 +10,6 @@ use ssh::{SshSession, SftpSession, SshConfig, FileEntry};
 use store::{Store, Host, HostGroup};
 use std::sync::Mutex;
 use tauri::State;
-use serde::{Deserialize, Serialize};
 
 // ─── 应用状态 ──────────────────────────────────────────────────────────────
 

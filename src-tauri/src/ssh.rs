@@ -1,4 +1,4 @@
-use ssh2::{Session, Channel, Sftp};
+use ssh2::{DisconnectCode, Session, Channel, Sftp};
 use std::io::Read;
 use std::net::TcpStream;
 use std::path::Path;
@@ -37,8 +37,7 @@ impl SshSession {
         session.handshake()
             .map_err(|e| format!("SSH handshake failed: {}", e))?;
 
-        session.userauth("banner", None::<&str>)
-            .ok();
+        session.set_banner("").ok();
 
         match config.auth_type.as_str() {
             "password" => {
@@ -93,21 +92,16 @@ impl SshSession {
 
     pub fn get_sftp(&self) -> Result<Sftp, String> {
         let mut sftp_guard = self.sftp.lock().map_err(|e| e.to_string())?;
-        if let Some(ref sftp) = *sftp_guard {
-            // Can't clone Sftp, return error
-            return Err("SFTP session already in use".to_string());
-        }
         let session = self.session.lock().map_err(|e| e.to_string())?;
         let sftp = session.sftp()
             .map_err(|e| format!("SFTP init failed: {}", e))?;
         *sftp_guard = Some(sftp);
-        // Return a reference
         Err("SFTP session created but must be accessed via dedicated methods".to_string())
     }
 
     pub fn disconnect(&self) -> Result<(), String> {
         let session = self.session.lock().map_err(|e| e.to_string())?;
-        session.disconnect(None::<&str>, "bye", None::<&str>)
+        session.disconnect(Some(DisconnectCode::Bye), "bye", None::<&str>)
             .map_err(|e| format!("Disconnect failed: {}", e))?;
         Ok(())
     }
@@ -211,7 +205,7 @@ impl SftpSession {
     }
 
     pub fn rename(&self, from: &str, to: &str) -> Result<(), String> {
-        self.sftp.rename(Path::new(from), Path::new(to))
+        self.sftp.rename(Path::new(from), Path::new(to), None)
             .map_err(|e| format!("Rename failed: {}", e))
     }
 
