@@ -101,7 +101,7 @@ impl SshSession {
 
     pub fn disconnect(&self) -> Result<(), String> {
         let session = self.session.lock().map_err(|e| e.to_string())?;
-        session.disconnect(Some(DisconnectCode::Bye), "bye", None::<&str>)
+                session.disconnect(None::<ssh2::DisconnectCode>, "bye", None::<&str>)
             .map_err(|e| format!("Disconnect failed: {}", e))?;
         Ok(())
     }
@@ -150,7 +150,7 @@ impl SftpSession {
                 permissions: format!("{:o}", stat.perm.unwrap_or(0)),
                 modified: stat.mtime
                     .map(|t| {
-                        use chrono::{DateTime, Utc};
+                        use chrono::DateTime;
                         let dt = DateTime::from_timestamp(t as i64, 0)
                             .unwrap_or_default();
                         dt.format("%Y-%m-%d %H:%M:%S").to_string()
