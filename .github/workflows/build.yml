@@ -53,15 +53,13 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ""
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
 
-        run: find src-tauri/target/release/bundle -type f -ls 2>/dev/null || echo "No bundle dir found"
-
       - name: Upload artifacts (Linux)
         uses: actions/upload-artifact@v4
         with:
           name: SSHTerm-linux
           path: |
-            target/release/bundle/deb/*
-            target/release/bundle/appimage/*
+            src-tauri/target/release/bundle/deb/*
+            src-tauri/target/release/bundle/appimage/*
 
   build-windows:
     runs-on: windows-2022
@@ -99,7 +97,7 @@ jobs:
         with:
           name: SSHTerm-windows
           path: |
-            target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/msi/*.msi
 
   create-release:
     if: startsWith(github.ref, 'refs/tags/v')
@@ -122,14 +120,10 @@ jobs:
           name: SSHTerm-windows
           path: release-artifacts/windows
 
-      - name: List downloaded files
-        run: find release-artifacts -type f -ls 2>/dev/null || echo "No files found"
-
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            release-artifacts/linux/target/release/bundle/deb/*.deb
-            release-artifacts/linux/target/release/bundle/appimage/*.AppImage
-            release-artifacts/windows/target/release/bundle/msi/*.msi
+            release-artifacts/linux/*
+            release-artifacts/windows/*
           generate_release_notes: true
